@@ -26,7 +26,10 @@ package com.thalesgroup.hudson.plugins.sourcemonitor;
 import hudson.model.AbstractBuild;
 import hudson.model.ModelObject;
 import hudson.model.Run;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -49,6 +52,15 @@ public class SourceMonitorResult implements Serializable {
         return owner;
     }
 
+    public Object getDynamic(String token, StaplerRequest req, StaplerResponse rsp) throws IOException {
+        token = token.toLowerCase();
+
+        if (token.equals("test")) {
+            return new SourceMonitorTest(owner);
+        }
+
+        return null;
+    }
 
 
     private static class BreadCrumbResult extends SourceMonitorResult implements ModelObject {
